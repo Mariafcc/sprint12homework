@@ -12,3 +12,24 @@ CREATE TABLE department
     PRIMARY KEY
     (id)
 );
+CREATE TABLE role
+(
+    id INTEGER
+    AUTO_INCREMENT NOT NULL,
+    title VARCHAR
+    (30),
+    salary DECIMAL,
+    department_id INTEGER,
+    PRIMARY KEY
+    (id)
+);
+CREATE TABLE employee
+(
+    id INTEGER
+    AUTO_INCREMENT NOT NULL,
+    firstName VARCHAR
+    (30),
+    lastName VARCHAR(30),
+    role_id INTEGER,
+    manager_id INTEGER NOT NULL
+);
