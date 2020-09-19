@@ -25,6 +25,14 @@ class Db {
     );
   }
   viewEmployee() {
-    return this.connection.query("");
+    return this.connection.query(
+      "SELECT employee.firstName, employee.lastName, role.title, department.name AS department FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id"
+    );
+  }
+  updateEmployee(roleId, employeeId) {
+    return this.connection.query(
+      "UPDATE employee SET role_id = ? WHERE id = ?",
+      [roleId, employeeId]
+    );
   }
 }

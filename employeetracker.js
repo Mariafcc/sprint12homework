@@ -1,4 +1,6 @@
 var inquirer = require("inquirer");
+var db = require("./db");
+require("console.table");
 
 // function which prompts the user for what action they should take
 function start() {
@@ -25,10 +27,10 @@ function start() {
         viewDep();
       }
       if (answer.action === "View all Employees by manager") {
-        viewempMan();
+        viewRoles();
       }
       if (answer.action === "Add Employee") {
-        AddEmp();
+        addEmp();
       }
       if (answer.action === "Remove Employee") {
         removeEmp();
@@ -42,109 +44,114 @@ function start() {
     });
 }
 
-function viewEmp() {
-  inquirer
-    .prompt([
-      {
-        name: "item",
-        type: "input",
-        message: "What is the item you would like to submit?",
-      },
-      {
-        name: "category",
-        type: "input",
-        message: "What category would you like to place your auction in?",
-      },
-      {
-        name: "startingBid",
-        type: "input",
-        message: "What would you like your starting bid to be?",
-        validate: function (value) {
-          if (isNaN(value) === false) {
-            return true;
-          }
-          return false;
-        },
-      },
-    ])
-    .then(function (answer) {
-      // when finished prompting, insert a new item into the db with that info
-      connection.query(
-        "INSERT INTO auctions SET ?",
-        {
-          item_name: answer.item,
-          category: answer.category,
-          starting_bid: answer.startingBid || 0,
-          highest_bid: answer.startingBid || 0,
-        },
-        function (err) {
-          if (err) throw err;
-          console.log("Your auction was created successfully!");
-          // re-prompt the user for if they want to bid or post
-          start();
-        }
-      );
-    });
-}
+const viewEmp = async () => {
+  const employees = await db.viewEmployee();
+  console.table(employees);
+  start();
+};
 
-function bidAuction() {
-  // query the database for all items being auctioned
-  connection.query("SELECT * FROM auctions", function (err, results) {
-    if (err) throw err;
-    // once you have the items, prompt the user for which they'd like to bid on
-    inquirer
-      .prompt([
-        {
-          name: "choice",
-          type: "rawlist",
-          choices: function () {
-            var choiceArray = [];
-            for (var i = 0; i < results.length; i++) {
-              choiceArray.push(results[i].item_name);
-            }
-            return choiceArray;
-          },
-          message: "What auction would you like to place a bid in?",
-        },
-        {
-          name: "bid",
-          type: "input",
-          message: "How much would you like to bid?",
-        },
-      ])
-      .then(function (answer) {
-        // get the information of the chosen item
-        var chosenItem;
-        for (var i = 0; i < results.length; i++) {
-          if (results[i].item_name === answer.choice) {
-            chosenItem = results[i];
-          }
-        }
+const viewDep = async () => {
+  const departments = await db.viewDepartment();
+  console.table(departments);
+  start();
+};
 
-        // determine if bid was high enough
-        if (chosenItem.highest_bid < parseInt(answer.bid)) {
-          // bid was high enough, so update db, let the user know, and start over
-          connection.query(
-            "UPDATE auctions SET ? WHERE ?",
-            [
-              {
-                highest_bid: answer.bid,
-              },
-              {
-                id: chosenItem.id,
-              },
-            ],
-            function (error) {
-              if (error) throw err;
-              console.log("Bid placed successfully!");
-              start();
-            }
-          );
-        } else {
-          // bid wasn't high enough, so apologize and start over
-          console.log("Your bid was too low. Try again...");
-          start();
-        }
-      });
+const viewRoles = async () => {
+  const roles = await db.viewRole();
+  console.table(roles);
+  start();
+};
+
+const addEmp = async () => {
+  // const employees = await db.viewEmployee();
+  const roles = await db.viewRole();
+  const employeeQ = await inquirer.prompt([
+    {
+      name: "first-name",
+      message: "What is employees first name?",
+    },
+    {
+      name: "last-name",
+      message: "What is employees last name?",
+    },
+  ]);
+  const roleChoices = roles.map(({ id, title }) => ({
+    name: title,
+    value: id,
+  }));
+  const { roleId } = await inquirer.prompt({
+    type: "list",
+    name: "roleId",
+    message: "What is employees role?",
+    choices: roleChoices,
   });
-}
+  employee.role_id = roleId;
+  await db.addEmployee(employeeQ);
+  start();
+};
+
+const addDep = async () => {
+  const department = await inquirer.prompt({
+    name: "d-name",
+    message: "what is the name of the department?",
+  });
+  await db.addDepartment(department);
+  start();
+};
+
+const addRoles = async () => {
+  const departments = await db.viewDepartment();
+  const departmentChoices = departments.map(({ id, name }) => ({
+    name: name,
+    value: id,
+  }));
+  const role = await inquirer.prompt([
+    {
+      name: "title",
+      message: "Name of role?",
+    },
+    {
+      name: "salary",
+      message: "What is the salary of the role?",
+    },
+    {
+      name: "depId",
+      type: "list",
+      message: "Which department does the role belong to?",
+      choices: departmentChoices,
+    },
+  ]);
+  await db.addRole(role);
+  start();
+};
+
+const updateEmpRole = async () => {
+  const employees = await db.viewEmployee();
+  const employeeChoices = employees.map(({ id, firstName, lastName }) => ({
+    name: `${firstName} ${lastName}`,
+    value: id,
+  }));
+  const { employeeId } = await inquirer.prompt([
+    {
+      name: "employeeId",
+      type: "list",
+      message: "What employee role will be updated?",
+      choices: employeeChoices,
+    },
+  ]);
+  const roles = await db.viewRole();
+  const roleChoices = roles.map(({ id, title }) => ({
+    name: title,
+    value: id,
+  }));
+  const { roleId } = await inquirer.prompt([
+    {
+      name: "roleId",
+      type: "list",
+      message: "What role will be assigned?",
+      choices: roleChoices,
+    },
+  ]);
+  await db.updateEmployee(employeeId, roleId);
+  start();
+};
