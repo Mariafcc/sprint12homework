@@ -169,3 +169,5 @@ const updateEmpRole = async () => {
   await db.updateEmployee(employeeId, roleId);
   start();
 };
+
+start();
