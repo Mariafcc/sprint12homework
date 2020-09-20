@@ -10,13 +10,14 @@ var connection = mysql.createConnection({
   user: "root",
 
   // Your password
-  password: "Jake2019",
-  database: "employeetracker_DB",
+  password: "",
+  database: "employeetracker_db",
 });
 
 // connect to the mysql server and sql database
 connection.connect(function (err) {
   if (err) throw err;
+  console.log("connected as id " + connection.threadId + "\n");
 });
 connection.query = util.promisify(connection.query);
 

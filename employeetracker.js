@@ -1,5 +1,7 @@
 var inquirer = require("inquirer");
 var db = require("./db");
+// var index = require("./db/index");
+// var connection = require("./db/connection");
 require("console.table");
 
 // function which prompts the user for what action they should take
@@ -14,9 +16,13 @@ function start() {
         "View all Employees by department",
         "View all Employees by manager",
         "Add Employee",
-        "Remove Employee",
+        "Add Department",
+        "Add Role",
         "Update Employee Role",
         "Update Employee Manager",
+        "Delete Department",
+        "Delete Role",
+        "Delete employee",
       ],
     })
     .then(function (answer) {
@@ -32,14 +38,22 @@ function start() {
       if (answer.action === "Add Employee") {
         addEmp();
       }
-      if (answer.action === "Remove Employee") {
-        removeEmp();
+      if (answer.action === "Add Department") {
+        addDep();
+      }
+      if (answer.action === "Add Role") {
+        addRoles();
       }
       if (answer.action === "Update Employee Role") {
-        updateEmp();
+        updateEmpRole();
       }
       if (answer.action === "Update Employee Manager") {
-        updateEmpMan();
+      }
+      if (answer.action === "Delete Department") {
+      }
+      if (answer.action === "Delete Role") {
+      }
+      if (answer.action === "Delete employee") {
       }
     });
 }
