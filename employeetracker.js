@@ -47,14 +47,14 @@ function start() {
       if (answer.action === "Update Employee Role") {
         updateEmpRole();
       }
-      if (answer.action === "Update Employee Manager") {
-      }
-      if (answer.action === "Delete Department") {
-      }
-      if (answer.action === "Delete Role") {
-      }
-      if (answer.action === "Delete employee") {
-      }
+      // if (answer.action === "Update Employee Manager") {
+      // }
+      // if (answer.action === "Delete Department") {
+      // }
+      // if (answer.action === "Delete Role") {
+      // }
+      // if (answer.action === "Delete employee") {
+      // }
     });
 }
 
@@ -169,5 +169,7 @@ const updateEmpRole = async () => {
   await db.updateEmployee(employeeId, roleId);
   start();
 };
+
+const deleteDep = async () => {};
 
 start();

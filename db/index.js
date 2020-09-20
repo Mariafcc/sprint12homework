@@ -35,4 +35,9 @@ class Db {
       [roleId, employeeId]
     );
   }
+  deleteDep() {
+    return this.connection.query("DELETE FROM department WHERE id = ?");
+  }
 }
+
+module.exports = Db;
