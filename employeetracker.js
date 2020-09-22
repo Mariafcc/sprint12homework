@@ -18,9 +18,9 @@ function start() {
         "Add Role",
         "Update Employee Role",
         "Update Employee Manager",
-        "Delete Department",
-        "Delete Role",
-        "Delete employee",
+        // "Delete Department",
+        // "Delete Role",
+        // "Delete employee",
       ],
     })
     .then(function (answer) {
@@ -80,11 +80,11 @@ const addEmp = async () => {
   const roles = await db.viewRole();
   const employeeQ = await inquirer.prompt([
     {
-      name: "first-name",
+      name: "firstName",
       message: "What is employees first name?",
     },
     {
-      name: "last-name",
+      name: "lastName",
       message: "What is employees last name?",
     },
   ]);
@@ -98,14 +98,14 @@ const addEmp = async () => {
     message: "What is employees role?",
     choices: roleChoices,
   });
-  employee.role_id = roleId;
+  employeeQ.role_id = roleId;
   await db.addEmployee(employeeQ);
   start();
 };
 
 const addDep = async () => {
   const department = await inquirer.prompt({
-    name: "d-name",
+    name: "name",
     message: "what is the name of the department?",
   });
   await db.addDepartment(department);
@@ -128,7 +128,7 @@ const addRoles = async () => {
       message: "What is the salary of the role?",
     },
     {
-      name: "depId",
+      name: "department_id",
       type: "list",
       message: "Which department does the role belong to?",
       choices: departmentChoices,
@@ -159,7 +159,7 @@ const updateEmpRole = async () => {
   }));
   const { roleId } = await inquirer.prompt([
     {
-      name: "roleId",
+      name: "role_id",
       type: "list",
       message: "What role will be assigned?",
       choices: roleChoices,

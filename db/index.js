@@ -8,8 +8,8 @@ db.addDepartment = (department) => {
 db.addRole = (role) => {
   return connection.query("INSERT INTO role SET ?", role);
 };
-db.addEmployee = (employee) => {
-  return connection.query("INSERT INTO employee SET ?", employee);
+db.addEmployee = (employeeQ) => {
+  return connection.query("INSERT INTO employee SET ?", employeeQ);
 };
 db.viewDepartment = () => {
   return connection.query(
@@ -27,19 +27,19 @@ db.viewEmployee = () => {
   );
 };
 db.updateEmployee = (roleId, employeeId) => {
-  connection.query("UPDATE employee SET role_id = ? WHERE id = ?", [
+  return connection.query("UPDATE employee SET role_id = ? WHERE id = ?", [
     roleId,
     employeeId,
   ]);
 };
 db.updateEmpMan = (managerId, employeeId) => {
-  connection.query("UPDATE employee SET manager_id = ? WHERE id = ?", [
+  return connection.query("UPDATE employee SET manager_id = ? WHERE id = ?", [
     managerId,
     employeeId,
   ]);
 };
-// db.deleteDep = () => {
-//   connection.query("DELETE FROM department WHERE id = ?");
+// db.deleteDep = (depId) => {
+//   connection.query("DELETE FROM department WHERE id = ?"[depId]);
 // };
 
 module.exports = db;
