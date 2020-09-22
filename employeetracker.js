@@ -1,7 +1,5 @@
 var inquirer = require("inquirer");
 var db = require("./db");
-// var index = require("./db/index");
-// var connection = require("./db/connection");
 require("console.table");
 
 // function which prompts the user for what action they should take
@@ -47,8 +45,9 @@ function start() {
       if (answer.action === "Update Employee Role") {
         updateEmpRole();
       }
-      // if (answer.action === "Update Employee Manager") {
-      // }
+      if (answer.action === "Update Employee Manager") {
+        updateEmpMan();
+      }
       // if (answer.action === "Delete Department") {
       // }
       // if (answer.action === "Delete Role") {
@@ -170,6 +169,35 @@ const updateEmpRole = async () => {
   start();
 };
 
-const deleteDep = async () => {};
+const updateEmpMan = async () => {
+  const employees = await db.viewEmployee();
+  const employeeChoices = employees.map(({ id, firstName, lastName }) => ({
+    name: `${firstName} ${lastName}`,
+    value: id,
+  }));
+  const { employeeId } = await inquirer.prompt([
+    {
+      name: "employeeId",
+      type: "list",
+      message: "What employee will be updated?",
+      choices: employeeChoices,
+    },
+  ]);
+  const manager = await db.viewEmployee();
+  const managerChoice = manager.map(({ id, firstName, lastName }) => ({
+    name: `${firstName} ${lastName}`,
+    value: id,
+  }));
+  const { managerId } = await inquirer.prompt([
+    {
+      name: "managerId",
+      type: "list",
+      message: "Who should the new manager be?",
+      choices: managerChoice,
+    },
+  ]);
+  await db.updateEmpMan(managerId, employeeId);
+  start();
+};
 
 start();
