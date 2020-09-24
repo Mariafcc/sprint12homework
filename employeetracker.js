@@ -11,14 +11,14 @@ function start() {
       message: "What would you like to do?",
       choices: [
         "View all Employees",
-        "View all Employees by department",
-        "View all Employees by manager",
+        "View all departments",
+        "View all managers",
         "Add Employee",
         "Add Department",
         "Add Role",
         "Update Employee Role",
         "Update Employee Manager",
-        // "Delete Department",
+        "Delete Department",
         // "Delete Role",
         // "Delete employee",
       ],
@@ -27,10 +27,10 @@ function start() {
       if (answer.action === "View all Employees") {
         viewEmp();
       }
-      if (answer.action === "View all Employees by department") {
+      if (answer.action === "View department") {
         viewDep();
       }
-      if (answer.action === "View all Employees by manager") {
+      if (answer.action === "View managers") {
         viewRoles();
       }
       if (answer.action === "Add Employee") {
@@ -48,8 +48,9 @@ function start() {
       if (answer.action === "Update Employee Manager") {
         updateEmpMan();
       }
-      // if (answer.action === "Delete Department") {
-      // }
+      if (answer.action === "Delete Department") {
+        deleteD();
+      }
       // if (answer.action === "Delete Role") {
       // }
       // if (answer.action === "Delete employee") {
@@ -197,6 +198,22 @@ const updateEmpMan = async () => {
     },
   ]);
   await db.updateEmpMan(managerId, employeeId);
+  start();
+};
+
+const deleteD = async () => {
+  const department = await db.viewDepartment();
+  const departmentChoices = department.map(({ id, name }) => ({
+    name: `${name}`,
+    value: id,
+  }));
+  const { name } = await inquirer.prompt({
+    name: "name",
+    type: "list",
+    message: "Which department would you like to remove?",
+    choices: departmentChoices,
+  });
+  await db.deleteDep(id, name);
   start();
 };
 
