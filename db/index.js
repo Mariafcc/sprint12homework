@@ -38,8 +38,11 @@ db.updateEmpMan = (managerId, employeeId) => {
     employeeId,
   ]);
 };
-db.deleteDep = (id, name) => {
-  return connection.query("DELETE FROM department WHERE name = ? ", [id, name]);
+db.deleteDep = (depId, depName) => {
+  return connection.query("DELETE FROM department WHERE name = ? ", [
+    depId,
+    depName,
+  ]);
 };
 
 module.exports = db;

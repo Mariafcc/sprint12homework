@@ -203,17 +203,17 @@ const updateEmpMan = async () => {
 
 const deleteD = async () => {
   const department = await db.viewDepartment();
-  const departmentChoices = department.map(({ id, name }) => ({
+  const departmentChoices = department.map(({ name, id }) => ({
     name: `${name}`,
     value: id,
   }));
-  const { name } = await inquirer.prompt({
+  const { depName } = await inquirer.prompt({
     name: "name",
     type: "list",
     message: "Which department would you like to remove?",
     choices: departmentChoices,
   });
-  await db.deleteDep(id, name);
+  await db.deleteDep(depName);
   start();
 };
 
