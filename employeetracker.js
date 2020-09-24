@@ -11,8 +11,8 @@ function start() {
       message: "What would you like to do?",
       choices: [
         "View all Employees",
-        "View all departments",
-        "View all managers",
+        "View departments",
+        "View managers",
         "Add Employee",
         "Add Department",
         "Add Role",
@@ -27,7 +27,7 @@ function start() {
       if (answer.action === "View all Employees") {
         viewEmp();
       }
-      if (answer.action === "View department") {
+      if (answer.action === "View departments") {
         viewDep();
       }
       if (answer.action === "View managers") {
