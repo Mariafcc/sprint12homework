@@ -23,11 +23,11 @@ db.viewRole = () => {
 };
 db.viewEmployee = () => {
   return connection.query(
-    "SELECT employee.firstName, employee.lastName, role.title, department.name AS department FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id"
+    "SELECT employee.id, employee.firstName, employee.lastName, role.title, department.name AS department FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id"
   );
 };
 db.updateEmployee = (roleId, employeeId) => {
-  return connection.query("UPDATE employee SET role_id = ? WHERE id = ?", [
+  return connection.query("UPDATE employee SET role_id = ? WHERE id = ? ", [
     roleId,
     employeeId,
   ]);
@@ -42,6 +42,12 @@ db.deleteDep = (depId, depName) => {
   return connection.query("DELETE FROM department WHERE name = ? ", [
     depId,
     depName,
+  ]);
+};
+db.deleteRole = (roleId, roleName) => {
+  return connection.query("DELETE FROM role WHERE title = ? ", [
+    roleId,
+    roleName,
   ]);
 };
 

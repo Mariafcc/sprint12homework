@@ -19,8 +19,7 @@ function start() {
         "Update Employee Role",
         "Update Employee Manager",
         "Delete Department",
-        // "Delete Role",
-        // "Delete employee",
+        "Delete Role",
       ],
     })
     .then(function (answer) {
@@ -51,8 +50,9 @@ function start() {
       if (answer.action === "Delete Department") {
         deleteD();
       }
-      // if (answer.action === "Delete Role") {
-      // }
+      if (answer.action === "Delete Role") {
+        deleteR();
+      }
       // if (answer.action === "Delete employee") {
       // }
     });
@@ -145,6 +145,7 @@ const updateEmpRole = async () => {
     name: `${firstName} ${lastName}`,
     value: id,
   }));
+  console.log(employeeChoices);
   const { employeeId } = await inquirer.prompt([
     {
       name: "employeeId",
@@ -160,13 +161,14 @@ const updateEmpRole = async () => {
   }));
   const { roleId } = await inquirer.prompt([
     {
-      name: "role_id",
+      name: "roleId",
       type: "list",
       message: "What role will be assigned?",
       choices: roleChoices,
     },
   ]);
-  await db.updateEmployee(employeeId, roleId);
+  console.log(employeeId, roleId);
+  await db.updateEmployee(roleId, employeeId);
   start();
 };
 
@@ -213,7 +215,25 @@ const deleteD = async () => {
     message: "Which department would you like to remove?",
     choices: departmentChoices,
   });
+  console.table(departmentChoices);
   await db.deleteDep(depName);
+  start();
+};
+const deleteR = async () => {
+  const role = await db.viewRole();
+  const roleChoices = role.map(({ title, id }) => ({
+    name: `${title}`,
+    value: id,
+  }));
+  console.table(roleChoices);
+  const { roleName } = await inquirer.prompt({
+    name: "title",
+    type: "list",
+    message: "Which role would you like to remove?",
+    choices: roleChoices,
+  });
+
+  await db.deleteRole(roleName);
   start();
 };
 
