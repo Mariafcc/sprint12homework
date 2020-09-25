@@ -18,7 +18,7 @@ CREATE TABLE role
     (30) UNIQUE NOT NULL,
     salary DECIMAL UNSIGNED NOT NULL,
     department_id INTEGER UNSIGNED NOT NULL,
-    CONSTRAINT fk_department FOREIGN KEY (department_id) REFERENCES department (id) ON DELETE CASCADE
+    INDEX CONSTRAINT fk_department FOREIGN KEY (department_id) REFERENCES department (id) ON DELETE CASCADE
 );
 CREATE TABLE employee
 (

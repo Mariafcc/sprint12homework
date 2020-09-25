@@ -38,17 +38,11 @@ db.updateEmpMan = (managerId, employeeId) => {
     employeeId,
   ]);
 };
-db.deleteDep = (depId, depName) => {
-  return connection.query("DELETE FROM department WHERE name = ? ", [
-    depId,
-    depName,
-  ]);
+db.deleteDep = (depId) => {
+  return connection.query("DELETE FROM department WHERE name = ? ", [depId]);
 };
-db.deleteRole = (roleId, roleName) => {
-  return connection.query("DELETE FROM role WHERE title = ? ", [
-    roleId,
-    roleName,
-  ]);
+db.deleteRole = (roleId) => {
+  return connection.query("DELETE FROM role WHERE id = ? ", [roleId]);
 };
 
 module.exports = db;

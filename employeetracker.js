@@ -58,24 +58,6 @@ function start() {
     });
 }
 
-const viewEmp = async () => {
-  const employees = await db.viewEmployee();
-  console.table(employees);
-  start();
-};
-
-const viewDep = async () => {
-  const departments = await db.viewDepartment();
-  console.table(departments);
-  start();
-};
-
-const viewRoles = async () => {
-  const roles = await db.viewRole();
-  console.table(roles);
-  start();
-};
-
 const addEmp = async () => {
   // const employees = await db.viewEmployee();
   const roles = await db.viewRole();
@@ -105,11 +87,17 @@ const addEmp = async () => {
 };
 
 const addDep = async () => {
-  const department = await inquirer.prompt({
+  const department = await db.viewDepartment();
+  const depChoices = department.map(({ id, name }) => ({
+    name: name,
+    value: id,
+  }));
+  const departmentQ = await inquirer.prompt({
     name: "name",
     message: "what is the name of the department?",
+    choices: depChoices,
   });
-  await db.addDepartment(department);
+  await db.addDepartment(departmentQ);
   start();
 };
 
@@ -209,14 +197,14 @@ const deleteD = async () => {
     name: `${name}`,
     value: id,
   }));
-  const { depName } = await inquirer.prompt({
-    name: "name",
+  const { depId } = await inquirer.prompt({
+    name: "depId",
     type: "list",
     message: "Which department would you like to remove?",
     choices: departmentChoices,
   });
   console.table(departmentChoices);
-  await db.deleteDep(depName);
+  await db.deleteDep(depId);
   start();
 };
 const deleteR = async () => {
@@ -225,15 +213,33 @@ const deleteR = async () => {
     name: `${title}`,
     value: id,
   }));
-  console.table(roleChoices);
-  const { roleName } = await inquirer.prompt({
-    name: "title",
+  const { roleId } = await inquirer.prompt({
+    name: "roleId",
     type: "list",
     message: "Which role would you like to remove?",
     choices: roleChoices,
   });
+  console.log(roleId);
 
-  await db.deleteRole(roleName);
+  await db.deleteRole(roleId);
+  start();
+};
+
+const viewEmp = async () => {
+  const employees = await db.viewEmployee();
+  console.table(employees);
+  start();
+};
+
+const viewDep = async () => {
+  const departments = await db.viewDepartment();
+  console.table(departments);
+  start();
+};
+
+const viewRoles = async () => {
+  const roles = await db.viewRole();
+  console.table(roles);
   start();
 };
 
