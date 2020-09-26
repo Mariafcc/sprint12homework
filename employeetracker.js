@@ -53,13 +53,10 @@ function start() {
       if (answer.action === "Delete Role") {
         deleteR();
       }
-      // if (answer.action === "Delete employee") {
-      // }
     });
 }
 
 const addEmp = async () => {
-  // const employees = await db.viewEmployee();
   const roles = await db.viewRole();
   const employeeQ = await inquirer.prompt([
     {
@@ -134,7 +131,7 @@ const updateEmpRole = async () => {
     name: `${firstName} ${lastName}`,
     value: id,
   }));
-  console.log(employeeChoices);
+
   const { employeeId } = await inquirer.prompt([
     {
       name: "employeeId",
@@ -156,7 +153,7 @@ const updateEmpRole = async () => {
       choices: roleChoices,
     },
   ]);
-  console.log(employeeId, roleId);
+
   await db.updateEmployee(roleId, employeeId);
   start();
 };

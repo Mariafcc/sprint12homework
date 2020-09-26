@@ -15,11 +15,6 @@ db.viewDepartment = () => {
   return connection.query(
     "SELECT d.id, d.name, sum(r.salary) budget FROM department d LEFT JOIN role r ON d.id = r.department_id GROUP BY d.id, d.name ORDER BY d.id"
   );
-  /*
-  return connection.query(
-    "SELECT department.id, department.name, SUM (role.salary) AS budget FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id  GROUP BY department.id, department.name"
-  );
-  */
 };
 db.viewRole = () => {
   return connection.query(
