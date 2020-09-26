@@ -217,7 +217,6 @@ const deleteR = async () => {
     message: "Which role would you like to remove?",
     choices: roleChoices,
   });
-  console.log(roleId);
 
   await db.deleteRole(roleId);
   start();
