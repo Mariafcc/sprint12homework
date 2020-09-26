@@ -3,18 +3,23 @@ const connection = require("./connection");
 const db = () => {};
 
 db.addDepartment = (department) => {
-  return connection.query("INSERT INTO department SET ?", department);
+  return connection.query("INSERT IGNORE INTO department SET ?", department);
 };
 db.addRole = (role) => {
-  return connection.query("INSERT INTO role SET ?", role);
+  return connection.query("INSERT IGNORE INTO role SET ?", role);
 };
 db.addEmployee = (employeeQ) => {
-  return connection.query("INSERT INTO employee SET ?", employeeQ);
+  return connection.query("INSERT IGNORE INTO employee SET ?", employeeQ);
 };
 db.viewDepartment = () => {
   return connection.query(
+    "SELECT d.id, d.name, sum(r.salary) budget FROM department d LEFT JOIN role r ON d.id = r.department_id GROUP BY d.id, d.name ORDER BY d.id"
+  );
+  /*
+  return connection.query(
     "SELECT department.id, department.name, SUM (role.salary) AS budget FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id  GROUP BY department.id, department.name"
   );
+  */
 };
 db.viewRole = () => {
   return connection.query(
@@ -39,8 +44,11 @@ db.updateEmpMan = (managerId, employeeId) => {
   ]);
 };
 db.deleteDep = (depId) => {
-  return connection.query("DELETE FROM department WHERE name = ? ", [depId]);
+  connection.query("DELETE FROM role WHERE department_id = ?", [depId]);
+  connection.query("DELETE FROM department WHERE id= ?", [depId]);
+  return true;
 };
+
 db.deleteRole = (roleId) => {
   return connection.query("DELETE FROM role WHERE id = ? ", [roleId]);
 };

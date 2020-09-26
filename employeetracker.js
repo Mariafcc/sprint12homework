@@ -124,6 +124,7 @@ const addRoles = async () => {
     },
   ]);
   await db.addRole(role);
+  console.table(viewRoles);
   start();
 };
 
