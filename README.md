@@ -8,3 +8,7 @@ Using the arrows user will select the function they would like to use, and depen
 
 ![](demoImg/terminaldemo.png)
 ![](demoImg/terminaldemotwo.png)
+
+## Video Demonstration
+
+https://drive.google.com/file/d/1zsxKK7ofVBq26sy9gvWn3VTjz6l89c4N/view?usp=sharing
